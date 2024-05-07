@@ -18,22 +18,14 @@ SPECIAL_SIGNS = [chr(i) for i in range(ord('!'), ord(')')+1)]
 def IsCommonPassword(password):
     # The function get a string which represent a password.
     # The function return True if the password is common, otherwise the function return False.
-
-    # Hash the password using SHA-1
     sha1_password = hashlib.sha1(password.encode()).hexdigest().upper()
-
-    # Take only the first 5 characters of the hash to search the API
     prefix = sha1_password[:5]
     suffix = sha1_password[5:]
     url = f"https://api.pwnedpasswords.com/range/{prefix}"
-    
-    # Make a request to the HIBP API
-    response = requests.get(url)
+        response = requests.get(url)
     if response.status_code == 200:
-        # Check if the suffix of the hash exists in the response
         return suffix in response.text
     else:
-        # If the request fails, print that there is an error
         print("Error checking password against HIBP API")
         return False
     
