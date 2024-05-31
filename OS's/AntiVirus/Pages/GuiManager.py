@@ -21,10 +21,10 @@ class ScreensManager:
         # Sets the color of the widgets.
         customtkinter.set_default_color_theme("dark-blue")
 
-        self.startUpPage = Pages.Starting_Page.StartUpPage(self.screen)
-        #self.scanningPage = Pages.Scanning_Page.ScanningPage(self.screen)
-        self.pages = [self.startUpPage,
-                      #self.scanningPage
+        #self.startUpPage = Pages.Starting_Page.StartUpPage(self.screen)
+        self.scanningPage = Pages.Scanning_Page.ScanningPage(self.screen)
+        self.pages = [#self.startUpPage,
+                      self.scanningPage
                       ]
         
         self.currentPage = self.pages[0]
