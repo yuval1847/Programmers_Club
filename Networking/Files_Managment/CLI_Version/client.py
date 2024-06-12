@@ -2,13 +2,9 @@ import socket
 import os
 
 class Client:
-    """A class which represent a client"""
+    """A class which represents a client."""
 
     def __init__(self):
-        self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.clientSocket.connect((socket.gethostname(), 1234))
-
-
         print("███████╗██╗██╗     ███████╗     ██████╗██╗     ██╗███████╗███╗   ██╗████████╗\n"
               "██╔════╝██║██║     ██╔════╝    ██╔════╝██║     ██║██╔════╝████╗  ██║╚══██╔══╝\n"
               "█████╗  ██║██║     █████╗      ██║     ██║     ██║█████╗  ██╔██╗ ██║   ██║\n"
@@ -19,62 +15,68 @@ class Client:
               "//         created by:Yuval Kuina         //\n"
               "********************************************\n")
 
+        self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.clientSocket.connect(("localhost", 1234))
+
+        print("Connected to the server.")
+        print("Client menu initialized.")
+
 
     def ChooseCommand(self):
-        # The function gets nothing.
-        # The function makes the user's choose a command.
+        # The function makes the user to choose a command
         print("Menu:\n1. Upload File\n2. Download File\n3. Quit")
         while True:
-            message_to_the_server = input("Enter your option: ")
-            if message_to_the_server == "1" or message_to_the_server.lower() == "upload file":
-                
+            command = input("Enter your option: ")
+
+            if command == "1":
                 self.UploadFile()
-            elif message_to_the_server == "2" or message_to_the_server.lower() == "download file":
-                self.clientSocket.send("2".encode())
+            elif command == "2":
                 self.DownloadFile()
-            elif message_to_the_server == "3" or message_to_the_server.lower() == "quit":
-                self.clientSocket.send("3".encode())
-                self.clientSocket.close()
-                quit()
+            elif command == "3":
+                self.Disconnect()
+                break
             else:
-                print("The given command doesn't exist!")
+                print("Invalid option. Please try again.")
 
 
     def UploadFile(self):
-        # The function asks the user for a file.
-        # The function send the server the choosen file.
-        filePath = input("Enter a file path:")
+        # The function asks the user for a file and uploads it to the server
+        filePath = input("Enter the file path: ")
 
         while not os.path.exists(filePath):
-            print("The given path doesn't exist!, please try again")
-            filePath = input("Enter a file path(the full path):")
-        
-        self.clientSocket.send("1".encode())
-        
-        # Send the file name.
-        self.clientSocket.send(filePath.split("\\")[-1])
+            print("The given path does not exist! Please try again.")
+            filePath = input("Enter a valid file path: ")
 
-        # Send the file content.
+        self.clientSocket.send("1".encode())
+        fileName = os.path.basename(filePath)
+        self.clientSocket.send(fileName.encode())
+
         with open(filePath, "r") as file:
             self.clientSocket.send(file.read().encode())
-                
+        print(f"The file '{fileName}' successfully uploaded.")
+
 
     def DownloadFile(self):
-        # The function gets nothing.
-        # The function gets the content of the file and create it on the choosen path.
-        fileName = self.clientSocket.recv(4096).decode()
-        newFileContent = self.clientSocket.recv(4096).decode()
+        # The function requests a file from the server and saves it locally
+        self.clientSocket.send("2".encode())
+        fileName = input("Enter the file name to download: ")
+        self.clientSocket.send(fileName.encode())
 
-        with open(fileName, "w") as Newfile:
-            Newfile.write(newFileContent)
+        response = self.clientSocket.recv(1024).decode()
+        if response == "File not found":
+            print("The requested file does not exist on the server.")
+        else:
+            with open(fileName, "w") as file:
+                file.write(self.clientSocket.recv(4096).decode())
+            print(f"File '{fileName}' successfully downloaded.")
 
-
+    
     def Disconnect(self):
         # The function gets nothing.
-        # The function close the socket of the current client.
+        # The function disconnect the client's socket.
+        self.clientSocket.send("3".encode())
         self.clientSocket.close()
-        print("CLIENT SHUTDOWN")
-
+        print("Disconnected from the server.")
 
 if __name__ == "__main__":
     client = Client()
