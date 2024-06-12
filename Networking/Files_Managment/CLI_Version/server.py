@@ -87,7 +87,7 @@ class Server:
 
 if __name__ == "__main__":
     # Define the folder path
-    folderPath = os.path.join(os.getcwd(), "my_folder")
+    folderPath = os.path.join(os.getcwd(), "My_Folder")
 
     # Check if the folder exists
     if not os.path.exists(folderPath):
