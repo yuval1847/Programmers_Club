@@ -6,7 +6,7 @@ class Client:
 
     def __init__(self):
         self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.clientSocket.connect(("127.0.0.1", 1234))
+        self.clientSocket.connect((socket.gethostname(), 1234))
 
 
         print("███████╗██╗██╗     ███████╗     ██████╗██╗     ██╗███████╗███╗   ██╗████████╗\n"
@@ -27,7 +27,7 @@ class Client:
         while True:
             message_to_the_server = input("Enter your option: ")
             if message_to_the_server == "1" or message_to_the_server.lower() == "upload file":
-                self.clientSocket.send("1".encode())
+                
                 self.UploadFile()
             elif message_to_the_server == "2" or message_to_the_server.lower() == "download file":
                 self.clientSocket.send("2".encode())
@@ -48,6 +48,8 @@ class Client:
         while not os.path.exists(filePath):
             print("The given path doesn't exist!, please try again")
             filePath = input("Enter a file path(the full path):")
+        
+        self.clientSocket.send("1".encode())
         
         # Send the file name.
         self.clientSocket.send(filePath.split("\\")[-1])
