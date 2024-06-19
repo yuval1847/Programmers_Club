@@ -3,7 +3,8 @@ import socket
 
 class Server:
     """A class which represent a server."""
-
+    
+    
     def __init__(self, directoryPath):
         print("███████╗██╗██╗     ███████╗    ███████╗███████╗██████╗ ██╗   ██╗███████╗██████╗\n" 
               "██╔════╝██║██║     ██╔════╝    ██╔════╝██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗\n"
@@ -49,24 +50,32 @@ class Server:
         # The function receives the file from the client and saves it to the server's directory
 
         fileName = self.clientSocket.recv(1024).decode() 
-        fileContent = self.clientSocket.recv(4096).decode()
-        
-        file_path = os.path.join(self.directoryDatabasePath, fileName)
-        with open(file_path, "w") as file:
-            file.write(fileContent)
+        fileSize = int(str(self.clientSocket.recv(1024).decode("utf8")))        
+        filePath = os.path.join(self.directoryDatabasePath, fileName)
+        with open(filePath, "wb") as file:
+            file.write(self.clientSocket.recv(fileSize))
         print(f"The file '{fileName}' successfully uploaded!")
 
 
     def SendFile(self):
-        # The function sends a requested file to the client if it exists
+        # The function sends a list of file names and the requested file to the client if it exists
         
+        os.chdir(self.directoryDatabasePath)
+        listOfFilesInDatabase = os.listdir()
+        filesNames = ""
+        for i in listOfFilesInDatabase:
+            filesNames+="*"+i
+        self.clientSocket.send(str(len(filesNames)*4).encode('utf8'))
+        self.clientSocket.send(filesNames.encode())
+
         fileName = self.clientSocket.recv(1024).decode()
-        file_path = os.path.join(self.directoryDatabasePath, fileName)
+        filePath = os.path.join(self.directoryDatabasePath, fileName)
         
-        if os.path.exists(file_path):
+        if os.path.exists(filePath):
             self.clientSocket.send(fileName.encode())
-            with open(file_path, "r") as file:
-                self.clientSocket.send(file.read().encode())
+            self.clientSocket.send(str(os.stat(filePath).st_size).encode('utf8'))
+            with open(filePath, "rb") as file:
+                self.clientSocket.send(file.read())
             print(f"The file '{fileName}' successfully sent!")
         else:
             self.clientSocket.send("File not found".encode())
@@ -77,6 +86,7 @@ class Server:
         self.clientSocket.close()
         self.serverSocket.close()
         print("Disconnected!")
+
 
 if __name__ == "__main__":
     server = Server(directoryPath=os.path.join(os.getcwd(), "FilesDirectory"))
