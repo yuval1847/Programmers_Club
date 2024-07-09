@@ -1,47 +1,51 @@
-import socket
-import ssl
+import mysql.connector
+from SSL_Socket import SslSocket
+import random
 
 class Server:
-    # A class which represent the server of the program.
-
+    # A class which represents the server of the program.
     def __init__(self) -> None:
-        self.serverSocket = self.CreatingServerSocket()
-        self.SslWrapingSocket()
-        self.clientSocket, self.clientAddress = self.sslServerSocket.accept()
-        self.SendMsg("Connected!")
+        # Creating an ssl socket
+        self.serverSocket = SslSocket(isServer=True, sourceIp="0.0.0.0", sourcePort=1234, certFilePath="cert.crt", keyFilePath="private.key")
 
-    
-    def CreatingServerSocket(self):
+        self.mydb, self.mycursor = self.ConnectToDatabase()
+
+        self.secretWord = self.GenerateASecretWord()
+
+        # Save the secret word in the database table
+        self.InsertDataIntoDatabase(content=self.secretWord)
+
+        # Sending a random secret word to the client
+        self.serverSocket.SendMsg(content=self.secretWord)
+
+    def GenerateASecretWord(self):
         # The function gets nothing.
-        # The function returns a server socket.
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.bind(("0.0.0.0", 1234))
-        s.listen(1)
-        return s
+        # The function returns a new string which consists of 8 random letters.
+        return ''.join([chr(random.randint(97, 122)) for i in range(8)])
 
+    def ConnectToDatabase(self):
+        # The function gets a database path as a parameter
+        # The function connect to the given database or create a new one if no path was given.
 
-    def SslWrapingSocket(self):
-        # The function gets nothing.
-        # The function wraps the server socket with ssl protocol.
+        # Connect to the database
+        mydb = mysql.connector.connect(host="localhost",
+                                       user="root",
+                                       password="root",
+                                       database="trojan_db")
+        # Create a cursor object to execute queries
+        mycursor = mydb.cursor()
+        return mydb, mycursor
 
-        # Define SSL context
-        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-        context.load_cert_chain(certfile='server.crt', keyfile='server.key')
+    def InsertDataIntoDatabase(self, content):
+        # The function gets a string as a parameter.
+        # The function adds the given string to the MySQL database of the server.
 
-        # Wrap the socket with SSL
-        self.sslServerSocket = context.wrap_socket(self.serverSocket, server_side=True)
-        print("Server is listening on port 1234...")
-    
+        # Create the database if it doesn't exist.
+        self.mycursor.execute("CREATE TABLE IF NOT EXISTS table1 (secretword VARCHAR(8))")
+        # Add the given content to the secretword column in the table
+        self.mycursor.execute(f"INSERT INTO table1 (secretword) VALUES ('{content[0:8]}')")
+        self.mydb.commit()
+        print("The secret word was added to the database successfully!")
 
-    def SendMsg(self, content):
-        # The function gets the string value.
-        # The function sends the given message and the lenth of it to the client.
-        self.clientSocket.send(len(str(((len(content)//4)*4)+4)).encode('utf8'))
-        self.clientSocket.send(content.encode())
-
-
-    def Dissconect(self):
-        # The function gets nothing.
-        # The function closes the socket of the connection with the client.
-        self.clientSocket.close()
-        self.sslServerSocket.close()
+if __name__ == "__main__":
+    serverObject = Server()
