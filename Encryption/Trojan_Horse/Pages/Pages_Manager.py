@@ -1,5 +1,6 @@
 import Pages.Home_Page
 import customtkinter
+import Pages.Server_Attack_Page
 
 class PagesManagers(customtkinter.CTk):
     """A class which manage the pages in the program"""
@@ -8,11 +9,16 @@ class PagesManagers(customtkinter.CTk):
 
         self.geometry("960x600")
         self.resizable(False, False)
+        self.configure(bg="lightpink")
         self.title("ShadowSteed 1.0")
 
-        self.frames = {"HomePage": Pages.Home_Page.HomePage(master=self)}
+        self.frames = {"HomePage": Pages.Home_Page.HomePage(master=self),
+                       "AttackPage": Pages.Server_Attack_Page.AttackPage(master=self)}
+        
+        self.update_idletasks() 
 
         self.ShowFrame("HomePage")
+
 
     def ShowFrame(self, pageName):
         # The function gets a page name.

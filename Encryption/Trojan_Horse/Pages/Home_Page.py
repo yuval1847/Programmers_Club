@@ -1,5 +1,5 @@
 import customtkinter
-import Helper_Functions
+import Pages.Helper_Functions
 import Pages.Base_Page
 
 class HomePage(Pages.Base_Page.BasePage):
@@ -41,10 +41,11 @@ class HomePage(Pages.Base_Page.BasePage):
 
         self.logoIconLabel = customtkinter.CTkLabel(master=self,
                                                     text="",
-                                                    image = Helper_Functions.HelperFunctions.CreateImage(imageFilePath="C:\\Users\\yuval\Desktop\\Python-Projects\\Programmers_Club\\Encryption\\Trojan_Horse\\Images\\Logo.png", width=200, height=200))
+                                                    image = Pages.Helper_Functions.HelperFunctions.CreateImage(imageFilePath="C:\\Users\\yuval\Desktop\\Python-Projects\\Programmers_Club\\Encryption\\Trojan_Horse\\Images\\Logo.png", width=200, height=200))
         self.logoIconLabel.place(relx=0.875, rely=0.465, anchor='center')
 
         self.LoadingBarAnimation()
+
 
     def LoadingBarAnimation(self):
         # The function gets nothing.
@@ -64,5 +65,5 @@ class HomePage(Pages.Base_Page.BasePage):
             else:
                 self.loadingBar.stop()
                 self.destroy()
-                self.after(2000)
+                self.after(1, lambda: self.master.ShowFrame("AttackPage"))
         UpdateLoadingBar()
