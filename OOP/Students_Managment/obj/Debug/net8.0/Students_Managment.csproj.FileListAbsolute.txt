@@ -1,0 +1,14 @@
+c:\Users\yuval\Desktop\Python-Projects\Programmers_Club\OOP\Students_Managment\obj\Debug\net8.0\Students_Managment.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\yuval\Desktop\Python-Projects\Programmers_Club\OOP\Students_Managment\obj\Debug\net8.0\Students_Managment.AssemblyInfoInputs.cache
+c:\Users\yuval\Desktop\Python-Projects\Programmers_Club\OOP\Students_Managment\obj\Debug\net8.0\Students_Managment.AssemblyInfo.cs
+c:\Users\yuval\Desktop\Python-Projects\Programmers_Club\OOP\Students_Managment\obj\Debug\net8.0\Students_Managment.csproj.CoreCompileInputs.cache
+c:\Users\yuval\Desktop\Python-Projects\Programmers_Club\OOP\Students_Managment\bin\Debug\net8.0\Students_Managment.exe
+c:\Users\yuval\Desktop\Python-Projects\Programmers_Club\OOP\Students_Managment\bin\Debug\net8.0\Students_Managment.deps.json
+c:\Users\yuval\Desktop\Python-Projects\Programmers_Club\OOP\Students_Managment\bin\Debug\net8.0\Students_Managment.runtimeconfig.json
+c:\Users\yuval\Desktop\Python-Projects\Programmers_Club\OOP\Students_Managment\bin\Debug\net8.0\Students_Managment.dll
+c:\Users\yuval\Desktop\Python-Projects\Programmers_Club\OOP\Students_Managment\bin\Debug\net8.0\Students_Managment.pdb
+c:\Users\yuval\Desktop\Python-Projects\Programmers_Club\OOP\Students_Managment\obj\Debug\net8.0\Students_Managment.dll
+c:\Users\yuval\Desktop\Python-Projects\Programmers_Club\OOP\Students_Managment\obj\Debug\net8.0\refint\Students_Managment.dll
+c:\Users\yuval\Desktop\Python-Projects\Programmers_Club\OOP\Students_Managment\obj\Debug\net8.0\Students_Managment.pdb
+c:\Users\yuval\Desktop\Python-Projects\Programmers_Club\OOP\Students_Managment\obj\Debug\net8.0\Students_Managment.genruntimeconfig.cache
+c:\Users\yuval\Desktop\Python-Projects\Programmers_Club\OOP\Students_Managment\obj\Debug\net8.0\ref\Students_Managment.dll
