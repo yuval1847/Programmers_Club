@@ -53,14 +53,33 @@ class Server:
     
     # The keyboard functions:
 
-    def FilterOneKeyOrCombination(self):
-        # The function gets nothing.
-        # The functino returns the 
-
-
     def GetKeyboardIn(self):
         # The function gets nothing.
         # The function returns the input of keyboard as a string.
-        pass
-        # Complete this later:
-        #return keyboard.on_press()
+        self.result = None
+        def FilterOneKeyOrCombination(event):
+            # The function gets nothing.
+            # The functino saves the entered one single key or combination as a string in the self.result parameter.
+            if event.event_type == 'down':
+                if len(keyboard._pressed_events) == 1:
+                    self.result = event.name
+                else:
+                    combo = '+'.join([keyboard.key_to_scan_codes(key)[0] for key in keyboard._pressed_events.keys()])
+                    self.result = keyboard.get_hotkey_name(combo)  # Store the combination as a result
+                
+                keyboard.unhook_all()
+                return
+        
+        # Attach the listener for key press events
+        keyboard.on_press(FilterOneKeyOrCombination)
+        
+        # Wait until a key press or combination is detected
+        keyboard.wait()
+        return self.result
+
+    
+    def SendKeyboardInput(self, keyIn:str):
+        # The function gets the keyboard input as a string.
+        # The function sends the input to the client as a binary sequence.
+        self.clientInputSocket.send("keyboard".encode())
+        self.clientInputSocket.send(keyIn.encode())
