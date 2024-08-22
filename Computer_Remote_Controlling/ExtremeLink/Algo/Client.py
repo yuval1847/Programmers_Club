@@ -24,3 +24,14 @@ class Client:
         self.inputThread = threading.Thread(target=)
         self.framesThread = threading.Thread(target=)
 
+
+    def ReadServerInput():
+        # The function gets nothing.
+        # The fucntion returns the given input from the server as a string.
+        pass
+
+    
+    def ApplyInput(inp:str):
+        # The function gets the input as a string input.
+        # The function apply the input on the client side.
+        pass
