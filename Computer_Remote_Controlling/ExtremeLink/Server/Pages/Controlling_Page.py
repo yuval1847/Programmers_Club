@@ -8,16 +8,34 @@ class StartPage(Pages.Base_Page.BasePage):
 
     def __init__(self, master) -> None:
         super().__init__(master=master, fgColor="#031019", bgColor="#031019")
+        self.isRunning = True
 
         self.server = Algo.Server_Algo.Server()
 
         self.currentFrame = None
-        self.currentFrameLabel = customtkinter.CTkLabel(master=self,
-                                                        text="")
+        self.currentFrameLabel = customtkinter.CTkLabel(master=self, text="")
         
+
+        # Play and Stop buttons:
+        self.playButton = customtkinter.CTkButton(master=self, text="Play", command=self.StartControlling())
+        self.playButton.place(relx=0.3, rely=0.95, anchor='center')
+        
+        self.stopButton = customtkinter.CTkButton(master=self, text="Stop", command=self.StopControlling())
+        self.stopButton.place(relx=0.5, rely=0.95, anchor='center')
+        
+
+        # Threads and mutex lock.
         self.mutexLock = threading.Lock()
         # self.inputThread = threading.Thread(target=)
         self.framesThread = threading.Thread(target=self.Video())
+
+
+        # Operate the page's functions:
+        while True:
+            while self.isRunning:
+                self.Video()
+            while not self.isRunning:
+                pass
 
 
     def Video(self):
@@ -30,14 +48,20 @@ class StartPage(Pages.Base_Page.BasePage):
         self.mutexLock.release()
 
 
-    def StartContolling(self):
+    def StartControlling(self):
         # The function gets nothing.
         # The function start the contolling over the client's computer
+        if self.isRunning:
+            return
+        self.isRunning = True
         self.framesThread.start()
 
 
     def StopControlling(self):
         # The function gets nothing.
         # The function disconects from the server.
+        if not self.isRunning:
+            return
+        self.isRunning = False
         self.framesThread.join()
         self.server.Disconnect()
