@@ -12,18 +12,18 @@ namespace Simulation_2.Stages.Stage1
         {
             
         }
-        public void SendFriendInvitation(User sender, User invitedFriend)
+        public IList<Post> GetFeed(User user)
         {
-            sender.Friends.Add(invitedFriend);
-            invitedFriend.Friends.Add(sender);
-        }
-        public void GetFeed(User user)
-        {
-            IList<Post> feed = new List<Post>();
+            IList<Post> feedWithVideos = new List<Post>();
+            IList<Post> feedWithoutVideos = new List<Post>();
+            IList<IList<Post>> currentFriendPosts = new List<IList<Post>>(); 
             foreach(var friend in user.Friends)
             {
-                feed.Add(GetPostsOfUser(friend));
+                currentFriendPosts = this.GetPostsOfUser(friend);
+                feedWithVideos = feedWithVideos.Concat(currentFriendPosts[0]).ToList();
+                feedWithoutVideos = feedWithoutVideos.Concat(currentFriendPosts[1]).ToList();
             }
+            return feedWithVideos.Concat(feedWithoutVideos).ToList();
         }
     }
 }

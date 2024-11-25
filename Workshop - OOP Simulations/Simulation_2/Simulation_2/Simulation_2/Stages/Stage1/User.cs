@@ -54,5 +54,10 @@ namespace Simulation_2.Stages.Stage1
             this.relationStatus = relationStatus;
             this.friends = new List<User>();
         }
+
+        public void AddNewFriend(User newFriend)
+        {
+            this.friends.Add(newFriend);
+        }
     }
 }

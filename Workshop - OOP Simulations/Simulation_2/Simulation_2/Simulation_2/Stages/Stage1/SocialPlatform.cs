@@ -44,17 +44,35 @@ namespace Simulation_2.Stages.Stage1
             this.posts.Add(p);
         }
         
-        public IList<Post> GetPostsOfUser(User user)
+        public void SendFriendRequest(User sender, User receiver)
         {
-            IList<Post> postsOfUser = new List<Post>();
-            foreach (var post in this.posts)
+            FriendRequest friendRequest = new FriendRequest(sender, receiver);
+            friendRequest.Approve();
+        }
+
+        public IList<IList<Post>> GetPostsOfUser(User user)
+        {
+            IList<Post> postsWithVideoLink = new List<Post>();
+            IList<Post> postsWithoutVideoLink = new List<Post>();
+            foreach (var post in this.Posts)
             {
-                if(post.PostOwner == user)
+                if (post.PostOwner == user)
                 {
-                    postsOfUser.Add(post);
+                    if (post.VideoLink != null)
+                    {
+                        postsWithVideoLink.Add(post);
+                    }
+                    else
+                    {
+                        postsWithoutVideoLink.Add(post);
+                    }
                 }
             }
-            return postsOfUser;
+            IList<IList<Post>> allPosts = new List<IList<Post>>();
+            allPosts.Add(postsWithVideoLink);
+            allPosts.Add(postsWithoutVideoLink);
+            return allPosts;
         }
+
     }
 }

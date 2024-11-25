@@ -50,7 +50,7 @@ namespace Simulation_2.Stages.Stage1
         public Post(User postOwner, string postContent)
         {
             this.__Post(postOwner, postContent);
-            this.videoLink = "";
+            this.videoLink = null;
         }
         private void __Post(User postOwner, string postContent)
         {
