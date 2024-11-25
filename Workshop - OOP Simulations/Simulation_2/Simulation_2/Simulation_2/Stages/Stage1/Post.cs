@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +13,8 @@ namespace Simulation_2.Stages.Stage1
         private User postOwner;
         private string postContent;
         private string videoLink;
-        private List<Comment> comments;
-        private List<Like> likes;
+        private IList<Comment> comments;
+        private IList<Like> likes;
 
         public User PostOwner
         {
@@ -25,7 +26,7 @@ namespace Simulation_2.Stages.Stage1
             get { return this.postContent; }
             set { this.postContent = value; }
         }
-        public string VideoLink
+        public string? VideoLink
         {
             get { return this.videoLink; }
             set { this.videoLink = value; }
@@ -43,18 +44,19 @@ namespace Simulation_2.Stages.Stage1
 
         public Post(User postOwner, string postContent, string videoLink)
         {
-            this.postOwner = postOwner;
-            this.postContent = postContent;
+            this.__Post(postOwner, postContent);
             this.videoLink = videoLink;
-            this.comments = new List<Comment>();
-            this.likes = new List<Like>();
         }
-
         public Post(User postOwner, string postContent)
         {
+            this.__Post(postOwner, postContent);
+            this.videoLink = "";
+        }
+        private void __Post(User postOwner, string postContent)
+        {
+            // This function was created in order to handle with duplication of code in the "Post" functions.
             this.postOwner = postOwner;
             this.postContent = postContent;
-            this.videoLink = "";
             this.comments = new List<Comment>();
             this.likes = new List<Like>();
         }

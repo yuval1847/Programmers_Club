@@ -18,6 +18,7 @@ namespace Simulation_2.Stages.Stage1
         private string lastName;
         private int age;
         private UserRelationStatus relationStatus;
+        private IList<User> friends;
 
         public string FirstName
         {
@@ -39,6 +40,11 @@ namespace Simulation_2.Stages.Stage1
             get { return this.relationStatus; }
             set { this.relationStatus = value; }
         }
+        public IList<User> Friends
+        {
+            get { return this.friends; }
+            set { this.friends = value; }
+        }
 
         public User(string firstName, string lastName, int age, UserRelationStatus relationStatus)
         {
@@ -46,6 +52,7 @@ namespace Simulation_2.Stages.Stage1
             this.lastName = lastName;
             this.age = age;
             this.relationStatus = relationStatus;
+            this.friends = new List<User>();
         }
     }
 }
